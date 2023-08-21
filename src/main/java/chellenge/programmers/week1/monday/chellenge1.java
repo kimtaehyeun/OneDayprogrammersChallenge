@@ -10,6 +10,7 @@ mode는 0과 1이 있으며, idx를 0 부터 code의 길이 - 1 까지 1씩 키�
 mode가 0일 때
 code[idx]가 "1"이 아니면 idx가 짝수일 때만 ret의 맨 뒤에 code[idx]를 추가합니다.
 code[idx]가 "1"이면 mode를 0에서 1로 바꿉니다.
+
 mode가 1일 때
 code[idx]가 "1"이 아니면 idx가 홀수일 때만 ret의 맨 뒤에 code[idx]를 추가합니다.
 code[idx]가 "1"이면 mode를 1에서 0으로 바꿉니다.
@@ -23,13 +24,42 @@ public class chellenge1 {
 //		입출력 예
 //		code			result
 //		abc1abc1abc		acbac
-
 		
+		
+		String var ="abc1abc1abc" ;
+		String result = Solution(var);
+		System.out.println(result);
 		
 	}
 	
 	public static String Solution(String code) {
 		String answer = "";
+		boolean mode = false;
+		
+		StringBuffer sb = new StringBuffer();
+		
+		for(int i=0; i<code.length(); i++) {
+			
+			if(code.charAt(i)=='1') {
+				mode = !mode;
+				continue;
+			}
+			
+			if(mode) {
+				if(i%2==0) {
+					continue;
+				}
+			}
+			else {
+				if(i%2!=0) {
+					continue;
+				}
+			}
+			sb.append(code.charAt(i));
+		}
+		
+		answer = sb.toString().length()>0 ? sb.toString() : "EMPTY";
+		
 		return answer;
 		
 	}
