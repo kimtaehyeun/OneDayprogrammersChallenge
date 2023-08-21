@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /*
- *  등차수열의 특정한 항만 더하기
+ *  주사위 게임 2
  *  
  *  문제 설명
 1부터 6까지 숫자가 적힌 주사위가 세 개 있습니다.
