@@ -1,6 +1,7 @@
 package chellenge.programmers.week1.friday;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /*
@@ -31,14 +32,14 @@ public class chellenge4 {
 	}
 	
 	public static String[] Solution(String my_string) {
-		String[] answer = {};
+		
 		List<String> ar = new ArrayList();
 		for(int i=0; i<my_string.length(); i++) {
 			ar.add(my_string.substring(i));
 		}
-				
+		Collections.sort(ar);
+		String [] answer = ar.toArray(new String[ar.size()]);
 		
-		 
         return answer;
 		
 		
