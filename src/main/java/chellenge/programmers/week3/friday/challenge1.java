@@ -5,6 +5,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class challenge1 {
+	static class Index{
+		int y, x;
+        public Index(int y, int x){
+            this.y = y;
+            this.x = x;
+        }
+	}
 	public static void main(String[] args) throws Exception {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,27 +31,20 @@ public class challenge1 {
 			for(int j=0; j<N; j++){
 				ar[i][j]=insertData.charAt(j);
 			}
-		}
-		//새로운 요소 추가
-		int [] dy={0,-1,0,1};
-		int [] dx={1,0,-1,0};
-		int yIdx = 0;
-		int xIdx = 0;
+		}	
 
 		for(int i=0; i<Q; i++){
-			ArrayList<Integer> yIndexList = new ArrayList<>();
-			ArrayList<Integer> xIndexList = new ArrayList<>();
-			int count = 0;
+			ArrayList<Index> indexList = new ArrayList<>();
 			insertData=br.readLine();
 			inputData = insertData.split(" ");
-			yIndexList.add(Integer.parseInt(inputData[0])-1);
-			xIndexList.add(Integer.parseInt(inputData[1])-1);
-
-			ar[yIndexList.get(0)][xIndexList.get(0)]=inputData[2].charAt(0);
-			search(ar,yIndexList,xIndexList);
-			if(yIndexList.size()>K) {
-				for(int j=0; j<yIndexList.size(); j++) {
-					ar[yIndexList.get(j)][xIndexList.get(j)]='.';
+			Index initIndex  = new Index(Integer.parseInt(inputData[0])-1, Integer.parseInt(inputData[1])-1);
+			indexList.add(initIndex);
+			ar[initIndex.y][initIndex.x]=inputData[2].charAt(0);
+			
+			indexList= search(ar,indexList);
+			if(indexList.size()>=K) {
+				for(int j=0; j<indexList.size(); j++) {
+					ar[indexList.get(j).y][indexList.get(j).x]='.';
 				}
 			}
 		}
@@ -56,27 +56,30 @@ public class challenge1 {
 			System.out.println(result);
 		}
 	}
-	public static void search(char[][] ar,ArrayList<Integer>yIndexList, ArrayList<Integer>xIndexList){
+	public static ArrayList<Index> search(char[][] ar,ArrayList<Index> indexList){
 		int [] dy={0,-1,0,1};
 		int [] dx={1,0,-1,0};
-		int yIdx = yIndexList.get(yIndexList.size()-1);
-		int xIdx = xIndexList.get(xIndexList.size()-1);
-
-		for(int i=0; i<4; i++) {
-			if(yIdx+dy[i]<0||yIdx+dy[i]>ar.length-1||xIdx+dx[i]<0||xIdx+dx[i]>ar.length-1)
-				continue;
-			else if(ar[yIdx+dy[i]][xIdx+dx[i]]==ar[yIdx][xIdx]) {
-				if(yIndexList.size()>1) {
-					if(yIndexList.get(yIndexList.size()-2)==yIdx+dy[i]&&xIndexList.get(xIndexList.size()-1)==xIdx+dx[i]) {//이미 왔던곳 인덱스이면
-						continue;	
+		boolean [][] room =new boolean [ar.length][ar.length];//방문 체크
+		room[indexList.get(0).y][indexList.get(0).x] = true;
+		
+		for(int i=0; i<indexList.size(); i++) {
+			int yIdx = indexList.get(i).y;
+			int xIdx = indexList.get(i).x;
+			
+			
+			for(int j=0; j<4; j++) {
+				int tempY =yIdx+dy[j]; 
+				int tempX =xIdx+dx[j]; 
+				if(tempY<0||tempY>ar.length-1||tempX<0||tempX>ar.length-1)
+					continue;
+				else if (ar[tempY][tempX]==ar[yIdx][xIdx]) {
+					if(!room[tempY][tempX]) {
+						indexList.add(new Index(tempY, tempX));
+						room[tempY][tempX] = true;
 					}
 				}
-				yIndexList.add(yIdx+dy[i]);
-				xIndexList.add(xIdx+dx[i]);
-				search(ar, yIndexList, xIndexList);
 			}
 		}
-
-
+		return indexList;
 	}
 }
