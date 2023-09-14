@@ -1,10 +1,7 @@
 package chellenge.programmers.week4.wednesday;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.Queue;
 
 
 
@@ -32,21 +29,56 @@ priorities의 가장 앞에 있으면 0, 두 번째에 있으면 1 … 과 같�
  */
 public class challenge2 {    
 	public static void main(String[] args) {
-//		입출력 예
-//		priorities			location	return
-//		[2, 1, 3, 2]		2			1
-//		[1, 1, 9, 1, 1, 1]	0			5
-		
-		int [] priorities= {2, 1, 3, 2};
-		int location= 2;
-		
+		//		입출력 예
+		//		priorities			location	return
+		//		[2, 1, 3, 2]		2			1
+		//		[1, 1, 9, 1, 1, 1]	0			5
+
+		int [] priorities= {1, 1, 9, 1, 1, 1};
+		int location= 0;
+
 		System.out.println(solution(priorities, location));
 
 	}
+	static class Process{
+		int prioritie;
+		int location;
+		public Process(int prioritie,int location){
+			this.prioritie=prioritie;
+			this.location=location;
+		}
 
+	}
 	public static int solution(int[] priorities, int location) {
-        int answer = 0;
-        return answer;
-    }
-	
+		int answer = 0;
+		Process last=new Process(0,0);
+		Queue<Process> q = new LinkedList<>();
+		for(int i=0; i<priorities.length; i++){
+			q.add(new Process(priorities[i],i));
+		}
+
+		while(true){
+            Process temp = new Process(0,0);
+            for(int i=0; i<q.size(); i++){
+                Process pollData = q.poll();
+                if(temp.prioritie<pollData.prioritie){
+                    temp = pollData;
+                }
+                q.offer(pollData);
+            }
+            for(int i=0; i<q.size(); i++) {
+            	last =  q.poll();
+            	if(temp.location==last.location) {
+            		break;
+            	}
+            	q.offer(last);
+            }
+            
+            answer++;
+            if(last.location==location)
+                return answer;
+            
+        }
+	}
+
 }
