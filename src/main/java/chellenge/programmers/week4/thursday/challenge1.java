@@ -44,9 +44,9 @@ public class challenge1 {
 		//		100				100		[10]							101
 		//		100				100		[10,10,10,10,10,10,10,10,10,10]	110
 
-		int bridge_length=100;
-		int weight = 100;
-		int[] truck_weights = {10,10,10,10,10,10,10,10,10,10};
+		int bridge_length=2;
+		int weight = 10;
+		int[] truck_weights = {7,4,5,6};
 
 
 		System.out.println(solution(bridge_length, weight, truck_weights));
@@ -62,20 +62,31 @@ public class challenge1 {
 	}
 	public static int solution(int bridge_length, int weight, int[] truck_weights) {
 		int answer = 0;
-		int timeState = 0;
 		int weightState = 0;
-		Queue<Truck> truck_List = new LinkedList<>();//다리를 건너지 않은 트럭들
-		for(int i=0; i<truck_weights.length; i++){
-			truck_List.offer(new Truck(truck_weights[i],0));
-		}
+		int truckNum = 0;
+
 		Queue<Truck> truckState = new LinkedList<>();//다리를 건너고 있는 트럭들
 
 		while(true){
-			if(truckState.isEmpty())
-				truckState.offer(truck_List.poll());
-
 			answer++;
-
+			if(truckNum==truck_weights.length&&truckState.size()==0){
+				//다리를 마지막까지 건넌 후가 1초 뒤기 때문에 총시간 바로 다음에 위치함
+				return answer;
+			}
+//			
+			if(truckNum!=truck_weights.length&&weightState+truck_weights[truckNum]<=weight) {
+				truckState.offer(new Truck(truck_weights[truckNum],0));
+				weightState +=truck_weights[truckNum];
+				truckNum++;
+			}
+			for(Truck item : truckState) {
+				item.time++;
+			}
+			if(truckState.peek().time==bridge_length) {
+				weightState-=truckState.peek().truck_weight;
+				truckState.poll();
+			}
+			
 		}
 		
 	}
