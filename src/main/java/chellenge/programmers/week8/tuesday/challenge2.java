@@ -15,7 +15,7 @@ import java.util.ArrayList;
 삼각형의 높이는 1 이상 500 이하입니다.
 삼각형을 이루고 있는 숫자는 0 이상 9,999 이하의 정수입니다.
 
- *
+ * 
  */
 public class challenge2 {
 
