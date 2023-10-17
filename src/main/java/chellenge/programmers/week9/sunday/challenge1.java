@@ -1,5 +1,10 @@
 package chellenge.programmers.week9.sunday;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 /*
  *게임 맵 최단거리
@@ -34,57 +39,84 @@ maps는 0과 1로만 이루어져 있으며, 0은 벽이 있는 자리, 1은 벽
 처음에 캐릭터는 게임 맵의 좌측 상단인 (1, 1) 위치에 있으며, 상대방 진영은 게임 맵의 우측 하단인 (n, m) 위치에 있습니다.
  * 
  */
+class Node {
+	int y;
+	int x;
+	int step;
+	public Node(int y,int x,int step){
+		this.y = y;
+		this.x = x;
+		this.step = step;
+	}
+}
 public class challenge1 {
 
-	public static int answer =0;
-	public static int x[] ={1,0,-1,0};
-	public static int y[] ={0,-1,0,1};
-	public static int distance = -1;
-	
+	public static int n;
+	public static int m;
+	public static int[][] map;
+	public static boolean [][] check ;
+	public static int answer =1;
+	public static final int[] X = {0, 0, 1, -1};
+	public static final int[] Y = {1, -1, 0, 0};
+
 	public static void main(String[] args) {
-//		입출력 예
-//		maps	answer
-//		[[1,0,1,1,1],[1,0,1,0,1],[1,0,1,1,1],[1,1,1,0,1],[0,0,0,0,1]]	11
-//		[[1,0,1,1,1],[1,0,1,0,1],[1,0,1,1,1],[1,1,1,0,0],[0,0,0,0,1]]	-1
+		//		입출력 예
+		//		maps	answer
+		//		[[1,0,1,1,1],[1,0,1,0,1],[1,0,1,1,1],[1,1,1,0,1],[0,0,0,0,1]]	11
+		//		[[1,0,1,1,1],[1,0,1,0,1],[1,0,1,1,1],[1,1,1,0,0],[0,0,0,0,1]]	-1
 
 		int [][] maps = {{1,0,1,1,1},{1,0,1,0,1},{1,0,1,1,1},{1,1,1,0,1},{0,0,0,0,1}};
-		
+
 		System.out.println(solution(maps));
 
 	}
 
-	
-	
+
+
 	public static int solution(int[][] maps) {
-	    //1.첫번째는 위치는 1,1 라스트 위치는 m,n;
+        //1.첫번째는 위치는 1,1 라스트 위치는 m,n;
 	    //2.최단거리를 구하는것이기에 방향을 모두 탐색하여 그중 가장 최단거리 찾기
-	    //3. 재귀함수 사용하는것이 맞을듯
-	    
-	    //3시,6시,9시,12시 방향으로 탐색
-		search(0,0,0,0,1,maps);
-        return distance;
+	    //3. bfs가 맞을듯
+        //기본변수셋팅
+        n = maps.length;
+        m = maps[0].length;
+        map = maps;
+        check = new boolean[n][m];
+        
+        Queue<Node> queue = new LinkedList<Node>();
+        //첫번째 큐에 수 넣기
+        queue.add(new Node(0,0,1));
+        check[0][0] = true;
+        bfs(queue);
+        
+        return answer = answer>1 ? answer:-1;
     }
-	public static void search(int xIdx,int yIdx,int beforeX, int beforeY,int count, int[][]maps){
-        if(xIdx==maps[0].length&&yIdx==maps.length){
-            if(distance>0){
-                distance = Math.min(count,distance);
-                return;
-            }
-            distance=count;
-        }
+	public static void bfs(Queue<Node> queue) {
+        while(!queue.isEmpty()){
+            Node node = queue.poll();
+//             방문여부 체크
             
-        for(int i=0; i<4; i++){
-            int tempy = yIdx+y[i];
-            int tempx = xIdx+x[i];
-            //범위밖 벗어나면 search X
-            if(tempy<0||tempy>=maps.length||tempx<0||tempx>=maps[0].length)
-                continue;
-            //이전에 왔던 곳이면
-            if(tempy==beforeY&&tempx==beforeX)
-                continue;
-            if(maps[tempy][tempx]==1)
-                search(tempx, tempy,xIdx,yIdx, count+=1,maps);
-        }
+            
+            //도착점 도착시
+            if(node.x==m-1&&node.y==n-1){
+                answer=node.step;
+                break;
+            }
+                
+            for(int i=0; i<4; i++){
+                int tempX = node.x + X[i];
+                int tempY = node.y + Y[i];
+                //갈수있는 조건 : 범위안에 있거나 방문하지 않은 좌표라면
+                if(tempX>=0&&tempX<m&&tempY>=0&&tempY<n){
+                    if(!check[tempY][tempX]&&map[tempY][tempX]==1){
+                    queue.add(new Node(tempY,tempX,node.step+1));
+                        check[tempY][tempX]= true;
+                    }
+                }
+            }
+            
+        }       
+        
     }
 
 
