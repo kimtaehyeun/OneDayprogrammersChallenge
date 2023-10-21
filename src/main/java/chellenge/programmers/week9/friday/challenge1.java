@@ -81,7 +81,7 @@ public class challenge1 {
 		int [][] rectangle = {{1,1,7,4},{3,2,5,5},{4,3,6,9},{2,6,8,8}};
 		int characterX = 1;
 		int characterY = 3;
-		int itemX = 7;
+		int itemX = 7; 
 		int itemY = 8;
 		System.out.println(solution(rectangle, characterX, characterY, itemX, itemY));
 
